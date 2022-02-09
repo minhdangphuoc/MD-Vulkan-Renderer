@@ -1,4 +1,0 @@
-D:/MD-Vulkan-Renderer/build/CMakeFiles/NoEngine.dir
-D:/MD-Vulkan-Renderer/build/CMakeFiles/Shaders.dir
-D:/MD-Vulkan-Renderer/build/CMakeFiles/ALL_BUILD.dir
-D:/MD-Vulkan-Renderer/build/CMakeFiles/ZERO_CHECK.dir
