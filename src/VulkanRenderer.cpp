@@ -1,31 +1,17 @@
 #include "VulkanRenderer.h"
 
 #include <iostream>
+#include <set>
 
 VulkanRenderer::VulkanRenderer()
 {
 }
 
-int VulkanRenderer::init(GLFWwindow* newWindow)
-{
-	window = newWindow;
-
-	try {
-		createInstance();
-		getPhysicalDevice();
-		createLogicalDevice();
-	}
-	catch (const std::runtime_error& e) {
-		std::cerr<<e.what()<<std::endl;
-		return EXIT_FAILURE;
-	}
-
-	return 0;
-}
 
 void VulkanRenderer::cleanup()
 {
 	vkDestroyDevice(mainDevice.logicalDevice, nullptr);
+	vkDestroySurfaceKHR(instance, surface, nullptr);
 	vkDestroyInstance(instance, nullptr);
 }
 
@@ -127,10 +113,27 @@ bool VulkanRenderer::checkValidationLayerSupport()
 	return true;
 }
 
+void VulkanRenderer::createSurface()
+{
+	if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create window surface!");
+    }
+}
+
+
 void VulkanRenderer::createLogicalDevice()
 {
 	//Get the queue family indices for the chosen Physical Device
 	QueueFamilyIndices indices = getQueueFamilies(mainDevice.physicalDevice);
+
+	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+	std::set<int> uniqueQueueFamilies = {indices.graphicsFamily, indices.presentFamily};
+
+	// Create the information for the surface
+	VkWin32SurfaceCreateInfoKHR createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+	createInfo.hwnd = glfwGetWin32Window(window);
+	createInfo.hinstance = GetModuleHandle(nullptr);
 
 	// Queue the logical device needs to create and info to do so (Only 1 for now, will add more later!)
 	VkDeviceQueueCreateInfo queueCreateInfo = {};
@@ -153,17 +156,27 @@ void VulkanRenderer::createLogicalDevice()
 
 	deviceCreateInfo.pEnabledFeatures = &deviceFeatures;			// Physical Device features Logical Device will use
 
+
+	// Queues are created at the same time as the device...
+	// So we want handle to queues
+	// From given logical device, of given Queue Family, of given Queue Index (0 since only one queue), place reference in given VkQueue
+
+	deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+	deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
+
 	// Create the logical device for the given physical device
 	VkResult result = vkCreateDevice(mainDevice.physicalDevice, &deviceCreateInfo, nullptr, &mainDevice.logicalDevice);
 	if (result != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create a Logical Device!");
 	}
+	
+	if (vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &surface) != VK_SUCCESS) {
+    	throw std::runtime_error("failed to create window surface!");
+	}
 
-	// Queues are created at the same time as the device...
-	// So we want handle to queues
-	// From given logical device, of given Queue Family, of given Queue Index (0 since only one queue), place reference in given VkQueue
 	vkGetDeviceQueue(mainDevice.logicalDevice, indices.graphicsFamily, 0, &graphicsQueue);
+	vkGetDeviceQueue(mainDevice.logicalDevice, indices.presentFamily, 0, &presentQueue);
 }
 
 void VulkanRenderer::getPhysicalDevice()
@@ -252,6 +265,8 @@ QueueFamilyIndices VulkanRenderer::getQueueFamilies(VkPhysicalDevice device)
 	std::vector<VkQueueFamilyProperties> queueFamilyList(queueFamilyCount);
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilyList.data());
 
+	VkBool32 presentSupport = false;
+
 	// Go through each queue family and check if it has at least 1 of the required types of queue
 	int i = 0;
 	for (const auto& queueFamily : queueFamilyList)
@@ -261,6 +276,15 @@ QueueFamilyIndices VulkanRenderer::getQueueFamilies(VkPhysicalDevice device)
 		if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
 			indices.graphicsFamily = i;		// If queue family is valid, then get index
+			
+		}
+
+		presentSupport = false;
+	
+		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+
+		if (presentSupport) {
+			indices.presentFamily = i;
 		}
 
 		// Check if queue family indices are in a valid state, stop searching if so
@@ -273,4 +297,22 @@ QueueFamilyIndices VulkanRenderer::getQueueFamilies(VkPhysicalDevice device)
 	}
 
 	return indices;
+}
+
+int VulkanRenderer::init(GLFWwindow* newWindow)
+{
+	window = newWindow;
+
+	try {
+		createInstance();
+		createSurface();
+		getPhysicalDevice();
+		createLogicalDevice();
+	}
+	catch (const std::runtime_error& e) {
+		std::cerr<<e.what()<<std::endl;
+		return EXIT_FAILURE;
+	}
+
+	return 0;
 }
