@@ -7,5 +7,16 @@ Vulkan Learn
 - [x] Create logical device
 ## Presentation
 - [x] Create Surface
-- [ ] Swap Chain
-- [ ] Image views
+- [x] Swap Chain
+- [x] Image views
+
+## Graphics pipeline basics
+- [ ] Shader modules
+- [ ] Fixed Functions
+- [ ] Render passes
+
+## Drawing
+- [ ] Framebuffers
+- [ ] Command buffers
+- [ ] Rendering and presentation
+- [ ] Frames in flight
