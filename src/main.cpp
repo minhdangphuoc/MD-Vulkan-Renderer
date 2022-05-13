@@ -12,7 +12,7 @@
 GLFWwindow* window;
 VulkanRenderer vulkanRenderer;
 
-void initWindow(std::string wName = "Test Window", const int width = 800, const int height = 600)
+void initWindow(std::string wName = "Vulkan Application", const int width = 800, const int height = 600)
 {
 	// Initialise GLFW
 	glfwInit();
@@ -23,6 +23,8 @@ void initWindow(std::string wName = "Test Window", const int width = 800, const 
 
 	window = glfwCreateWindow(width, height, wName.c_str(), nullptr, nullptr);
 }
+
+
 
 int main()
 {
@@ -39,6 +41,7 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+		vulkanRenderer.drawFrame();
 	}
 
 	vulkanRenderer.cleanup();

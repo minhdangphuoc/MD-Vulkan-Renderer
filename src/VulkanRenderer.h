@@ -28,6 +28,7 @@ public:
 
 	int init(GLFWwindow* newWindow);
 	void cleanup();
+	void drawFrame();
 
 	~VulkanRenderer();
 
@@ -42,6 +43,11 @@ private:
 	const std::vector<const char*> deviceExtensions = {
     	VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
+
+	// std::vector<VkDynamicState> dynamicStates = {
+	// 	VK_DYNAMIC_STATE_VIEWPORT,
+	// 	VK_DYNAMIC_STATE_LINE_WIDTH
+	// };
 
 	#ifdef NDEBUG
 		const bool enableValidationLayers = false;
@@ -65,6 +71,19 @@ private:
     VkExtent2D swapChainExtent;
 	std::vector<VkImageView> swapChainImageViews;
 
+	// Pipeline
+	VkShaderModule createShaderModule(const std::vector<char>& code);
+	VkPipelineLayout pipelineLayout;
+	VkPipeline graphicsPipeline;
+	VkRenderPass renderPass;
+
+	// Drawing
+	std::vector<VkFramebuffer> swapChainFramebuffers;
+	VkCommandPool commandPool;
+	VkCommandBuffer commandBuffer;
+	VkSemaphore imageAvailableSemaphore;
+	VkSemaphore renderFinishedSemaphore;
+	VkFence inFlightFence;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -73,7 +92,15 @@ private:
 	void createSurface();	
 	void createSwapChain();
 	void createImageViews();
+	void createRenderPass();
+	void createGraphicsPipeline();
+	void createFramebuffers();
+	void createCommandPool();
+	void createCommandBuffer();
+	void createSyncObjects();
+
 	
+
 	// - Get Functions
 	void getPhysicalDevice();
 
@@ -93,7 +120,8 @@ private:
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
-
+	// -- Recording Funtion
+	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
 };
 
