@@ -11,12 +11,15 @@ Vulkan Learn
 - [x] Image views
 
 ## Graphics pipeline basics
-- [ ] Shader modules
-- [ ] Fixed Functions
-- [ ] Render passes
+- [x] Shader modules
+- [x] Fixed Functions
+- [x] Render passes
 
 ## Drawing
-- [ ] Framebuffers
-- [ ] Command buffers
-- [ ] Rendering and presentation
-- [ ] Frames in flight
+- [x] Framebuffers
+- [x] Command buffers
+- [x] Rendering and presentation
+- [x] Frames in flight
+
+## Triangle 
+![Triangle VK](img/Triangle.png)
