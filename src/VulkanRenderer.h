@@ -21,6 +21,8 @@
 
 #include "Utilities.h"
 
+const int MAX_FRAMES_IN_FLIGHT = 2;
+
 class VulkanRenderer
 {
 public:
@@ -82,10 +84,19 @@ private:
 	// Drawing
 	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkCommandPool commandPool;
-	VkCommandBuffer commandBuffer;
-	VkSemaphore imageAvailableSemaphore;
-	VkSemaphore renderFinishedSemaphore;
-	VkFence inFlightFence;
+
+	// Before: Frames in flight
+	// VkCommandBuffer commandBuffer;
+	// VkSemaphore imageAvailableSemaphore;
+	// VkSemaphore renderFinishedSemaphore;
+	// VkFence inFlightFence;
+
+	// Frames in flight -> array of commandBuffers
+	std::vector<VkCommandBuffer> commandBuffers;
+	std::vector<VkSemaphore> imageAvailableSemaphores;
+	std::vector<VkSemaphore> renderFinishedSemaphores;
+	std::vector<VkFence> inFlightFences;
+	uint32_t currentFrame = 0;
 
 	// Vulkan Functions
 	// - Create Functions

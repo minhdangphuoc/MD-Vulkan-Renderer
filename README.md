@@ -19,7 +19,7 @@ Vulkan Learn
 - [x] Framebuffers
 - [x] Command buffers
 - [x] Rendering and presentation
-- [ ] Frames in flight
+- [x] Frames in flight
 
 ## Triangle 
 ![Triangle VK](img/Triangle.png)
