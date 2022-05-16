@@ -57,20 +57,6 @@ void VulkanRenderer::cleanup()
 	}
 	
 	vkDestroyCommandPool(mainDevice.logicalDevice, commandPool, nullptr);
-	
-	for (auto framebuffer : swapChainFramebuffers) {
-		vkDestroyFramebuffer(mainDevice.logicalDevice, framebuffer, nullptr);
-	}
-	
-	vkDestroyPipeline(mainDevice.logicalDevice, graphicsPipeline, nullptr);
-	vkDestroyPipelineLayout(mainDevice.logicalDevice, pipelineLayout, nullptr);
-	vkDestroyRenderPass(mainDevice.logicalDevice, renderPass, nullptr);
-
-	for (auto imageView : swapChainImageViews) {
-		vkDestroyImageView(mainDevice.logicalDevice, imageView, nullptr);
-	}
-
-	vkDestroySwapchainKHR(mainDevice.logicalDevice, swapChain, nullptr);
 	vkDestroyDevice(mainDevice.logicalDevice, nullptr);
 	
 	vkDestroySurfaceKHR(instance, surface, nullptr);
