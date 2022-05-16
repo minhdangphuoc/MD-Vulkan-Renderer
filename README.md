@@ -1,26 +1,27 @@
 # MD Vulkan Renderer
 
 # Goals
+## Ver0.1.0
 
-## Setup
+### Setup
 
 - [x] Create instace
 - [x] Get physical device
 - [x] Create logical device
 
-## Presentation
+### Presentation
 
 - [x] Create Surface
 - [x] Swap Chain
 - [x] Image views
 
-## Graphics pipeline basics
+### Graphics pipeline basics
 
 - [x] Shader modules
 - [x] Fixed Functions
 - [x] Render passes
 
-## Drawing
+### Drawing
 
 - [x] Framebuffers
 - [x] Command buffers
@@ -28,20 +29,34 @@
 - [x] Frames in flight
 - [x] Swapchain Recreation
 
-## Triangle 
+### Triangle 
 
 ![Triangle VK](img/Triangle.png)
 
-## Vertex Buffers
+## Ver0.2.0
 
-## Uniform Buffers
+### Vertex Buffers
 
-## Texture mapping
+## Ver0.3.0
 
-## Depth buffering
+### Uniform Buffers
 
-## Loading models
+## Ver0.4.0
 
-## Generating Mipmaps
+### Texture mapping
 
-## Multisampling
+## Ver0.5.0
+
+### Depth buffering
+
+## Ver0.6.0
+
+### Loading models
+
+## Ver0.7.0
+
+### Generating Mipmaps
+
+## Ver1.0.0
+
+### Multisampling
