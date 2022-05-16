@@ -31,3 +31,17 @@
 ## Triangle 
 
 ![Triangle VK](img/Triangle.png)
+
+## Vertex Buffers
+
+## Uniform Buffers
+
+## Texture mapping
+
+## Depth buffering
+
+## Loading models
+
+## Generating Mipmaps
+
+## Multisampling
