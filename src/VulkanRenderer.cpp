@@ -875,3 +875,8 @@ void VulkanRenderer::drawFrame() {
 
 	vkQueuePresentKHR(presentQueue, &presentInfo);
 }
+
+void VulkanRenderer::deviceWaitIdle()
+{
+	vkDeviceWaitIdle(mainDevice.logicalDevice);
+}

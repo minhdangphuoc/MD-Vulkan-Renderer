@@ -29,6 +29,8 @@ public:
 	int init(GLFWwindow* newWindow);
 	void cleanup();
 	void drawFrame();
+	// -- Waiting
+	void deviceWaitIdle();
 
 	~VulkanRenderer();
 

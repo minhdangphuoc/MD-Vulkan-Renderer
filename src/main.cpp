@@ -29,7 +29,7 @@ void initWindow(std::string wName = "Vulkan Application", const int width = 800,
 int main()
 {
 	// Create Window
-	initWindow("Test Window", 800, 600);
+	initWindow("Vulkan Application", 800, 600);
 
 	// Create Vulkan Renderer instance
 	if (vulkanRenderer.init(window) == EXIT_FAILURE)
@@ -43,6 +43,8 @@ int main()
 		glfwPollEvents();
 		vulkanRenderer.drawFrame();
 	}
+
+	vulkanRenderer.deviceWaitIdle();
 
 	vulkanRenderer.cleanup();
 
