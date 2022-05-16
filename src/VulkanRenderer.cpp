@@ -17,9 +17,11 @@ VulkanRenderer::~VulkanRenderer()
 }
 
 // SETUP 
+
 int VulkanRenderer::init(GLFWwindow* newWindow)
 {
 	window = newWindow;
+	glfwSetWindowUserPointer(window, this);
 
 	try {
 		createInstance();
@@ -45,6 +47,8 @@ int VulkanRenderer::init(GLFWwindow* newWindow)
 
 void VulkanRenderer::cleanup()
 {
+	cleanupSwapChain();
+
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 	{
 		vkDestroySemaphore(mainDevice.logicalDevice, imageAvailableSemaphores[i], nullptr);
@@ -846,7 +850,22 @@ void VulkanRenderer::drawFrame() {
 	vkResetFences(mainDevice.logicalDevice, 1, &inFlightFences[currentFrame]);
 
 	uint32_t imageIndex;
-    vkAcquireNextImageKHR(mainDevice.logicalDevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(
+						mainDevice.logicalDevice, 
+						swapChain, 
+						UINT64_MAX, 
+						imageAvailableSemaphores[currentFrame], 
+						VK_NULL_HANDLE, 
+						&imageIndex);
+	
+	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+		recreateSwapChain();
+		return;
+	} else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+		throw std::runtime_error("failed to acquire swap chain image!");
+	}
+
+	vkResetFences(mainDevice.logicalDevice, 1, &inFlightFences[currentFrame]);
 
 	vkResetCommandBuffer(commandBuffers[currentFrame], 0);
 	recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
@@ -871,7 +890,7 @@ void VulkanRenderer::drawFrame() {
     	throw std::runtime_error("failed to submit draw command buffer!");
 	}
 
-	 VkPresentInfoKHR presentInfo{};
+	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
 	presentInfo.waitSemaphoreCount = 1;
@@ -883,12 +902,56 @@ void VulkanRenderer::drawFrame() {
 
 	presentInfo.pImageIndices = &imageIndex;
 
-	vkQueuePresentKHR(presentQueue, &presentInfo);
-	
+	result = vkQueuePresentKHR(presentQueue, &presentInfo);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
+            framebufferResized = false;
+            recreateSwapChain();
+        } else if (result != VK_SUCCESS) {
+            throw std::runtime_error("failed to present swap chain image!");
+        }
 	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 
 void VulkanRenderer::deviceWaitIdle()
 {
 	vkDeviceWaitIdle(mainDevice.logicalDevice);
+}
+
+void VulkanRenderer::cleanupSwapChain()
+{
+	for (auto & i : swapChainFramebuffers)
+	{
+		vkDestroyFramebuffer(mainDevice.logicalDevice, i, nullptr);
+	}
+
+	vkDestroyPipeline(mainDevice.logicalDevice, graphicsPipeline, nullptr);
+	vkDestroyPipelineLayout(mainDevice.logicalDevice, pipelineLayout, nullptr);
+	vkDestroyRenderPass(mainDevice.logicalDevice, renderPass, nullptr);
+
+	for (auto & i : swapChainImageViews)
+	{
+		vkDestroyImageView(mainDevice.logicalDevice, i, nullptr);
+	} 
+
+	vkDestroySwapchainKHR(mainDevice.logicalDevice, swapChain, nullptr);
+}
+
+void VulkanRenderer::recreateSwapChain()
+{
+	int width = 0, height = 0;
+    glfwGetFramebufferSize(window, &width, &height);
+    while (width == 0 || height == 0) {
+        glfwGetFramebufferSize(window, &width, &height);
+        glfwWaitEvents();
+    }
+	
+	deviceWaitIdle();
+	
+	cleanupSwapChain();
+
+	createSwapChain();
+	createImageViews();
+	createRenderPass();
+    createGraphicsPipeline();
+    createFramebuffers();
 }

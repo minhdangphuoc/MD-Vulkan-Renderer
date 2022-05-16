@@ -33,6 +33,14 @@ public:
 	void drawFrame();
 	// -- Waiting
 	void deviceWaitIdle();
+	// -- Setter Functions
+	void setFramebufferResized(bool value) {this -> framebufferResized = value;}
+
+	
+	static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+		auto app = reinterpret_cast<VulkanRenderer*>(glfwGetWindowUserPointer(window));
+		app->setFramebufferResized(true);
+	}
 
 	~VulkanRenderer();
 
@@ -96,7 +104,9 @@ private:
 	std::vector<VkSemaphore> imageAvailableSemaphores;
 	std::vector<VkSemaphore> renderFinishedSemaphores;
 	std::vector<VkFence> inFlightFences;
+	bool framebufferResized = false;
 	uint32_t currentFrame = 0;
+
 
 	// Vulkan Functions
 	// - Create Functions
@@ -112,6 +122,8 @@ private:
 	void createCommandBuffer();
 	void createSyncObjects();
 
+	// - Recreate Function
+	void recreateSwapChain();
 	
 
 	// - Get Functions
@@ -135,6 +147,9 @@ private:
 
 	// -- Recording Funtion
 	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+	
+	// -- Cleanup SwapChain
+	void cleanupSwapChain();
 
 };
 

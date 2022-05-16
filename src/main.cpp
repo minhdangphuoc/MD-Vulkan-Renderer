@@ -19,9 +19,11 @@ void initWindow(std::string wName = "Vulkan Application", const int width = 800,
 
 	// Set GLFW to NOT work with OpenGL
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
+	// glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	
 	window = glfwCreateWindow(width, height, wName.c_str(), nullptr, nullptr);
+	
+	glfwSetFramebufferSizeCallback(window, vulkanRenderer.framebufferResizeCallback);
 }
 
 
