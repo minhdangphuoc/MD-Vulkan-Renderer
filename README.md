@@ -37,7 +37,7 @@
 
 ### Vertex Buffers
 
-- [ ] Vertex Buffers
+- [x] Vertex Buffers
 - [ ] Staging Buffer
 - [ ] Copies and Motion
 
