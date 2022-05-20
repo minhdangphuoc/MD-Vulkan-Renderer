@@ -61,6 +61,12 @@ private:
 	// 	VK_DYNAMIC_STATE_LINE_WIDTH
 	// };
 
+	const std::vector<Vertex> vertices = {
+		{{0.0f, -0.5f}, {1.0f, 1.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+	};
+
 	#ifdef NDEBUG
 		const bool enableValidationLayers = false;
 	#else
@@ -107,6 +113,9 @@ private:
 	bool framebufferResized = false;
 	uint32_t currentFrame = 0;
 
+	// Vertex Buffer
+	VkBuffer vertexBuffer;
+	VkDeviceMemory vertexBufferMemory;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -121,6 +130,7 @@ private:
 	void createCommandPool();
 	void createCommandBuffer();
 	void createSyncObjects();
+	void createVertexBuffer();
 
 	// - Recreate Function
 	void recreateSwapChain();
@@ -136,9 +146,10 @@ private:
 	bool checkValidationLayerSupport();
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
-	// -- Getter Functions
+	// -- Getter & Finder Functions
 	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
 	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device); // Get SC support query
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	// -- Choosing Functions
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
