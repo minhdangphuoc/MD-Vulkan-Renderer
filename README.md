@@ -37,6 +37,10 @@
 
 ### Vertex Buffers
 
+- [ ] Vertex Buffers
+- [ ] Staging Buffer
+- [ ] Copies and Motion
+
 ## Ver0.3.0
 
 ### Uniform Buffers
