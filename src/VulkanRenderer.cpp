@@ -81,7 +81,7 @@ void VulkanRenderer::createInstance()
 	appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 1);		// Custom version of the application
 	appInfo.pEngineName = "MD Engine";							// Custom engine name
 	appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);			// Custom engine version
-	appInfo.apiVersion = VK_API_VERSION_1_3;					// The Vulkan Version
+	appInfo.apiVersion = VK_API_VERSION_1_0;					// The Vulkan Version
 
 	// Creation information for a VkInstance (Vulkan Instance)
 	VkInstanceCreateInfo createInfo = {};
