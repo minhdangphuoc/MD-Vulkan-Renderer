@@ -81,7 +81,7 @@ void VulkanRenderer::createInstance()
 	appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 1);		// Custom version of the application
 	appInfo.pEngineName = "MD Engine";							// Custom engine name
 	appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);			// Custom engine version
-	appInfo.apiVersion = VK_API_VERSION_1_0;					// The Vulkan Version
+	appInfo.apiVersion = VK_API_VERSION_1_2;					// The Vulkan Version
 
 	// Creation information for a VkInstance (Vulkan Instance)
 	VkInstanceCreateInfo createInfo = {};
@@ -518,8 +518,8 @@ void VulkanRenderer::createImageViews() {
 
 void VulkanRenderer::createGraphicsPipeline()
 {
-	auto vertShaderCode = readFile("D:/MD-Vulkan-Renderer/shaders/shader.vert.spv");
-    auto fragShaderCode = readFile("D:/MD-Vulkan-Renderer/shaders/shader.frag.spv");
+	auto vertShaderCode = readFile("./shaders/shader.vert.spv");
+    auto fragShaderCode = readFile("./shaders/shader.frag.spv");
 
 	// Vertex
 	auto bindingDescription = Vertex::getBindingDescription();
@@ -555,6 +555,13 @@ void VulkanRenderer::createGraphicsPipeline()
 	VkPipelineColorBlendStateCreateInfo colorBlending{};
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
+
+	// - Copy Function
+	VkPushConstantRange pushConstantRange{};
+	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+	pushConstantRange.offset = 0;
+	pushConstantRange.size = sizeof(PushConstantData);
+
 
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	
@@ -637,14 +644,13 @@ void VulkanRenderer::createGraphicsPipeline()
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipelineLayoutInfo.setLayoutCount = 0; // Optional
 	pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
-	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+	pipelineLayoutInfo.pushConstantRangeCount = 1; 
+	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange; 
 
 	if (vkCreatePipelineLayout(mainDevice.logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create pipeline layout!");
 	}
 
-	
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = shaderStages;
@@ -807,6 +813,8 @@ void VulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	renderPassInfo.clearValueCount = 1;
 	renderPassInfo.pClearValues = &clearColor;
 
+	frame = (frame + 1) % 1000; 
+
 	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
@@ -818,7 +826,21 @@ void VulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 
 		vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-		vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+		for (int i = 0; i < 4; i++) {
+			PushConstantData push{};
+			push.offset = {-0.5f + frame * motionSpeed, -0.4f + i * 0.5f};
+			push.color = {0.0f, 0.0f, 0.2f + i * 0.2f};
+
+			vkCmdPushConstants(
+				commandBuffer,
+				pipelineLayout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(PushConstantData),
+				&push
+			);
+			vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+		}
 
 	vkCmdEndRenderPass(commandBuffer);
 

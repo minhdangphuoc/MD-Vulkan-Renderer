@@ -71,6 +71,7 @@ private:
 	const std::vector<uint16_t> indices = {
     	0, 1, 2, 2, 3, 0
 	};
+	
 
 	#ifdef NDEBUG
 		const bool enableValidationLayers = false;
@@ -123,6 +124,10 @@ private:
 	VkDeviceMemory vertexBufferMemory;
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
+
+	// Motion
+	uint32_t frame = 0;
+	const float motionSpeed = 0.002f;
 
 	// Vulkan Functions
 	// - Create Functions

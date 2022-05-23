@@ -19,7 +19,7 @@ class QueueFamilyIndices
 class Vertex {
 	public:
 	glm::vec2 pos;
-    glm::vec3 color;
+    alignas(16) glm::vec3 color;
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
@@ -45,6 +45,13 @@ class Vertex {
 
         return attributeDescriptions;
     }
+};
+
+class PushConstantData
+{
+    public:
+    glm::vec2 offset;
+    alignas(16) glm::vec3 color;
 };
 
 class SwapChainSupportDetails {
