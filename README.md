@@ -41,6 +41,8 @@
 - [x] Staging Buffer
 - [x] Copies and Motion
 
+![Motion and copies](img/Motion.gif)
+
 ## Ver0.3.0
 
 ### Uniform Buffers
