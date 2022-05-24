@@ -45,23 +45,25 @@
 
 ## Ver0.3.0
 
-### 3D Cube Rotation
+### Uniform Buffers
+
+### 2D Rotation
 
 ## Ver0.4.0
 
-### Uniform Buffers
+### Texture mapping
 
 ## Ver0.5.0
 
-### Texture mapping
+### Depth buffering
 
 ## Ver0.6.0
 
-### Depth buffering
+### Loading models
 
 ## Ver0.7.0
 
-### Loading models
+### 3D rotation
 
 ## Ver0.8.0
 
