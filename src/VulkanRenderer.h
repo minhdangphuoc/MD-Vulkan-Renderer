@@ -61,6 +61,18 @@ private:
 	// 	VK_DYNAMIC_STATE_LINE_WIDTH
 	// };
 
+	const std::vector<Vertex> vertices = {
+		{{-0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}},
+		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	};
+
+	const std::vector<uint16_t> indices = {
+    	0, 1, 2, 2, 3, 0
+	};
+	
+
 	#ifdef NDEBUG
 		const bool enableValidationLayers = false;
 	#else
@@ -107,6 +119,15 @@ private:
 	bool framebufferResized = false;
 	uint32_t currentFrame = 0;
 
+	// Vertex Buffer
+	VkBuffer vertexBuffer;
+	VkDeviceMemory vertexBufferMemory;
+	VkBuffer indexBuffer;
+	VkDeviceMemory indexBufferMemory;
+
+	// Motion
+	uint32_t frame = 0;
+	const float motionSpeed = 0.002f;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -121,10 +142,13 @@ private:
 	void createCommandPool();
 	void createCommandBuffer();
 	void createSyncObjects();
+	void createVertexBuffer();
+	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+	void createIndexBuffer();
+
 
 	// - Recreate Function
 	void recreateSwapChain();
-	
 
 	// - Get Functions
 	void getPhysicalDevice();
@@ -136,14 +160,18 @@ private:
 	bool checkValidationLayerSupport();
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
-	// -- Getter Functions
+	// -- Getter & Finder Functions
 	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
 	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device); // Get SC support query
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	// -- Choosing Functions
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+
+	// -- Copying Function
+	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 	// -- Recording Funtion
 	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);

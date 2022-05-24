@@ -37,9 +37,17 @@
 
 ### Vertex Buffers
 
+- [x] Vertex Buffers
+- [x] Staging Buffer
+- [x] Copies and Motion
+
+![Motion and copies](img/Motion.gif)
+
 ## Ver0.3.0
 
 ### Uniform Buffers
+
+### 2D Rotation
 
 ## Ver0.4.0
 
@@ -54,6 +62,10 @@
 ### Loading models
 
 ## Ver0.7.0
+
+### 3D rotation
+
+## Ver0.8.0
 
 ### Generating Mipmaps
 
