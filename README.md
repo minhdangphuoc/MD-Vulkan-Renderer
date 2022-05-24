@@ -45,21 +45,25 @@
 
 ## Ver0.3.0
 
-### Uniform Buffers
+### 3D Cube Rotation
 
 ## Ver0.4.0
 
-### Texture mapping
+### Uniform Buffers
 
 ## Ver0.5.0
 
-### Depth buffering
+### Texture mapping
 
 ## Ver0.6.0
 
-### Loading models
+### Depth buffering
 
 ## Ver0.7.0
+
+### Loading models
+
+## Ver0.8.0
 
 ### Generating Mipmaps
 
