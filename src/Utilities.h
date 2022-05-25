@@ -16,6 +16,41 @@ class QueueFamilyIndices
 
 };
 
+class PushConstantData
+{
+    public:
+    glm::mat2 transform{1.0f};
+    glm::vec2 offset;
+    alignas(16) glm::vec3 color;
+};
+
+class SwapChainSupportDetails {
+	public:
+		VkSurfaceCapabilitiesKHR capabilities;
+		std::vector<VkSurfaceFormatKHR> formats;
+		std::vector<VkPresentModeKHR> presentModes;
+};
+
+static std::vector<char> readFile(const std::string& filename) {
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+    if (!file.is_open()) {
+        throw std::runtime_error("failed to open file!");
+    }
+
+	size_t fileSize = (size_t) file.tellg();
+	std::vector<char> buffer(fileSize);
+
+	file.seekg(0);
+	file.read(buffer.data(), fileSize);
+
+	file.close();
+
+	return buffer;
+}
+
+
+
 class Vertex {
 	public:
 	glm::vec2 pos;
@@ -47,34 +82,57 @@ class Vertex {
     }
 };
 
-class PushConstantData
+class Transform2dComponent 
 {
-    public:
-    glm::vec2 offset;
-    alignas(16) glm::vec3 color;
-};
-
-class SwapChainSupportDetails {
 	public:
-		VkSurfaceCapabilitiesKHR capabilities;
-		std::vector<VkSurfaceFormatKHR> formats;
-		std::vector<VkPresentModeKHR> presentModes;
+	glm::vec2 translation{};
+    glm::vec2 scale{1.0f, 1.0f};
+    float rotation;
+
+	glm::mat2 mat2() 
+    {
+        const float sin = glm::sin(rotation);
+        const float cos = glm::cos(rotation);
+        
+        glm::mat2 rotMatrix{{cos, sin}, {-sin, cos}};
+
+        glm::mat2 scaleMat {{scale.x, .0f}, {.0f, scale.y}};
+        return scaleMat * rotMatrix;
+    }
 };
 
-static std::vector<char> readFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+class GameObject 
+{
+    public: 
+    using id_t = unsigned int;
 
-    if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!");
+    static GameObject createGameObject()
+    {
+        static id_t currentId = 0;
+        return GameObject{currentId++};
     }
 
-	size_t fileSize = (size_t) file.tellg();
-	std::vector<char> buffer(fileSize);
 
-	file.seekg(0);
-	file.read(buffer.data(), fileSize);
+    GameObject(const GameObject &) = delete;
+    GameObject &operator=(const GameObject &) = delete;
+    GameObject(GameObject &&) = default;
+    GameObject &operator=(GameObject &&) = default;
 
-	file.close();
+    // getter
+    id_t getId() 
+    {
+        return id;
+    }
 
-	return buffer;
-}
+    glm::vec3 color{};
+	Transform2dComponent transform2d;
+
+    private:
+    id_t id;
+
+    GameObject(id_t objId): id(objId)
+    {
+
+    }
+
+};

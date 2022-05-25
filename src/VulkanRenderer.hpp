@@ -18,6 +18,8 @@
 #include <cstddef>
 #include <limits> 
 #include <algorithm>
+#include <glm/gtc/constants.hpp>
+
 
 #include "Utilities.h"
 
@@ -62,10 +64,9 @@ private:
 	// };
 
 	const std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}},
-		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 	};
 
 	const std::vector<uint16_t> indices = {
@@ -127,7 +128,10 @@ private:
 
 	// Motion
 	uint32_t frame = 0;
-	const float motionSpeed = 0.002f;
+	// const float motionSpeed = 0.002f;
+
+	// Game Object
+	std::vector<GameObject> gameObjects;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -152,6 +156,7 @@ private:
 
 	// - Get Functions
 	void getPhysicalDevice();
+	void getGameObject();
 
 	// - Support Functions
 	// -- Checker Functions

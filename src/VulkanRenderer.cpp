@@ -1,4 +1,4 @@
-#include "VulkanRenderer.h"
+#include "VulkanRenderer.hpp"
 
 #include <iostream>
 #include <set>
@@ -28,6 +28,7 @@ int VulkanRenderer::init(GLFWwindow* newWindow)
 		createSurface();
 		getPhysicalDevice();
 		createLogicalDevice();
+		getGameObject();
 		createSwapChain();
 		createImageViews();
 		createRenderPass();
@@ -813,7 +814,7 @@ void VulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	renderPassInfo.clearValueCount = 1;
 	renderPassInfo.pClearValues = &clearColor;
 
-	frame = (frame + 1) % 1000; 
+	// frame = (frame + 1) % 1000; 
 
 	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -826,10 +827,13 @@ void VulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 
 		vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-		for (int i = 0; i < 4; i++) {
+		for (auto &obj : gameObjects) {
+			obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+
 			PushConstantData push{};
-			push.offset = {-0.5f + frame * motionSpeed, -0.4f + i * 0.5f};
-			push.color = {0.0f, 0.0f, 0.2f + i * 0.2f};
+			push.offset = obj.transform2d.translation;
+			push.color = obj.color;
+			push.transform = obj.transform2d.mat2();
 
 			vkCmdPushConstants(
 				commandBuffer,
@@ -1108,4 +1112,19 @@ void VulkanRenderer::createIndexBuffer()
 
     vkDestroyBuffer(mainDevice.logicalDevice, stagingBuffer, nullptr);
     vkFreeMemory(mainDevice.logicalDevice, stagingBufferMemory, nullptr);
+}
+
+// Loading model
+void VulkanRenderer::getGameObject() 
+{
+	for (int i = 0; i < 5; i++)
+	{
+		auto object = GameObject::createGameObject();
+		object.color = {0.1f + i * 0.1f, 0.8f, 0.1f};
+		object.transform2d.translation.x = 0.2f + i * 0.1f;
+		object.transform2d.translation.y = 0.2f - i * 0.1f;
+		object.transform2d.scale = {0.5f, 0.5f};
+		object.transform2d.rotation = (0.1f + i * 0.1f) * glm::two_pi<float>();
+		gameObjects.push_back(std::move(object));
+	}
 }
