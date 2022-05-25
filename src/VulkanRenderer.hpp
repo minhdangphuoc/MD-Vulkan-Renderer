@@ -37,14 +37,14 @@ public:
 	void deviceWaitIdle();
 	// -- Setter Functions
 	void setFramebufferResized(bool value) {this -> framebufferResized = value;}
-
+	void setAngle(int newAngle) {
+		angle = newAngle;
+	}
 	
 	static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
 		auto app = reinterpret_cast<VulkanRenderer*>(glfwGetWindowUserPointer(window));
 		app->setFramebufferResized(true);
 	}
-
-	~VulkanRenderer();
 
 private:
 	GLFWwindow* window;
@@ -125,13 +125,14 @@ private:
 	VkDeviceMemory vertexBufferMemory;
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
-
+	
 	// Motion
 	uint32_t frame = 0;
 	// const float motionSpeed = 0.002f;
 
 	// Game Object
 	std::vector<GameObject> gameObjects;
+	int angle = 0;
 
 	// Vulkan Functions
 	// - Create Functions

@@ -2,7 +2,20 @@
 #include <fstream>
 #include <glm/glm.hpp>
 #include <array>
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <vector>
+#include <string>
+#include <math.h>
+#include <utility>  
+#include <iomanip>
+#include <chrono>
+#include <thread>
+
 // Indices (locations) of QUeue Families (if they exist at all)
+
+
 class QueueFamilyIndices 
 {
 	public:
@@ -88,6 +101,7 @@ class Transform2dComponent
 	glm::vec2 translation{};
     glm::vec2 scale{1.0f, 1.0f};
     float rotation;
+    int angle = 0;
 
 	glm::mat2 mat2() 
     {

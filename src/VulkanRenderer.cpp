@@ -10,12 +10,6 @@ VulkanRenderer::VulkanRenderer()
 }
 
 
-
-
-VulkanRenderer::~VulkanRenderer()
-{
-}
-
 // SETUP 
 
 int VulkanRenderer::init(GLFWwindow* newWindow)
@@ -519,8 +513,8 @@ void VulkanRenderer::createImageViews() {
 
 void VulkanRenderer::createGraphicsPipeline()
 {
-	auto vertShaderCode = readFile("./shaders/shader.vert.spv");
-    auto fragShaderCode = readFile("./shaders/shader.frag.spv");
+	auto vertShaderCode = readFile("D:/shaders/shader.vert.spv");
+    auto fragShaderCode = readFile("D:/shaders/shader.frag.spv");
 
 	// Vertex
 	auto bindingDescription = Vertex::getBindingDescription();
@@ -828,12 +822,17 @@ void VulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 		vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
 		for (auto &obj : gameObjects) {
-			obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+			
+			obj.transform2d.rotation = glm::mod((float)((angle / 360.0f) * 6.28), glm::two_pi<float>());
 
 			PushConstantData push{};
 			push.offset = obj.transform2d.translation;
 			push.color = obj.color;
-			push.transform = obj.transform2d.mat2();
+			
+			// Function for getting new rotation value;
+			
+			push.transform = obj.transform2d.mat2(); // change this to dynamic
+
 
 			vkCmdPushConstants(
 				commandBuffer,
