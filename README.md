@@ -40,6 +40,8 @@
 - [x] Vertex Buffers
 - [x] Staging Buffer
 
+![Vertex Buffer](img/vertexbufferdemo.png)
+
 ## Ver0.3.0
 
 ### Uniform Buffers
