@@ -39,7 +39,6 @@
 
 - [x] Vertex Buffers
 - [x] Staging Buffer
-- [ ] Copies and Motion
 
 ## Ver0.3.0
 
