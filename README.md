@@ -39,7 +39,8 @@
 
 - [x] Vertex Buffers
 - [x] Staging Buffer
-- [ ] Copies and Motion
+
+![Vertex Buffer](img/vertexbufferdemo.png)
 
 ## Ver0.3.0
 
