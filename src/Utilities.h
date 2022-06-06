@@ -1,6 +1,10 @@
 #pragma once
 #include <fstream>
+
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
 #include <glm/glm.hpp>
+
 #include <array>
 // Indices (locations) of QUeue Families (if they exist at all)
 class QueueFamilyIndices 
@@ -47,10 +51,11 @@ class Vertex {
     }
 };
 
-struct UniformBufferObject {
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 proj;
+class UniformBufferObject {
+    public:
+    alignas(16) glm::mat4 model;
+    alignas(16) glm::mat4 view;
+    alignas(16) glm::mat4 proj;
 };
 
 class SwapChainSupportDetails {
