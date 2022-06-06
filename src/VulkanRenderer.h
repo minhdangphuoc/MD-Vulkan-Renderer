@@ -10,6 +10,12 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
+
 #include <stdexcept>
 #include <vector>
 #include <cstring>
@@ -18,6 +24,9 @@
 #include <cstddef>
 #include <limits> 
 #include <algorithm>
+#include <iostream>
+#include <set>
+#include <cstdlib>
 
 #include "Utilities.h"
 
@@ -124,6 +133,16 @@ private:
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
 
+	// Uniform Buffer 
+	VkDescriptorSetLayout descriptorSetLayout;
+
+	std::vector<VkBuffer> uniformBuffers;
+	std::vector<VkDeviceMemory> uniformBuffersMemory;
+
+	VkDescriptorPool descriptorPool;
+	std::vector<VkDescriptorSet> descriptorSets;
+
+
 	// Vulkan Functions
 	// - Create Functions
 	void createInstance();
@@ -140,6 +159,11 @@ private:
 	void createVertexBuffer();
 	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 	void createIndexBuffer();
+	void createDescriptorSetLayout();
+	void createUniformBuffers();
+	void createDescriptorPool();
+	void createDescriptorSets();
+
 
 
 	// - Recreate Function
@@ -174,5 +198,7 @@ private:
 	// -- Cleanup SwapChain
 	void cleanupSwapChain();
 
+	// -- Update Funtions
+	void updateUniformBuffer(uint32_t currentImage);
 };
 
