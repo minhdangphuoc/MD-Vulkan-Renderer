@@ -46,6 +46,8 @@
 
 ### Uniform Buffers
 
+![Uniform Buffer](img/UniformBufferDemo.gif)
+
 ## Ver0.4.0
 
 ### Texture mapping
