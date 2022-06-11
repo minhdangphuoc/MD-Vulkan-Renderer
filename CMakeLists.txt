@@ -56,6 +56,17 @@ endif()
 
 include_directories(external)
 
+# 3. Set STB_INCLUDE_PATH in .env.cmake to target specific STB version
+if (DEFINED STB_INCLUDE_PATH)
+  set(STB_LIBRARIES "${STB_INCLUDE_PATH}") # 1.2 Make sure lib path is correct
+  set(STB_FOUND "True")
+endif()
+if (NOT STB_FOUND)
+	message(FATAL_ERROR "Could not find stb library!")
+else()
+	message(STATUS "Using stb lib at: ${STB_LIBRARIES}")
+endif()
+
 # If TINYOBJ_PATH not specified in .env.cmake, try fetching from git repo
 if (NOT TINYOBJ_PATH)
   message(STATUS "TINYOBJ_PATH not specified in .env.cmake, using external/tinyobjloader")
@@ -88,11 +99,13 @@ if (WIN32)
     ${TINYOBJ_PATH}
     ${GLFW_INCLUDE_DIRS}
     ${GLM_PATH}
+    ${STB_INCLUDE_PATH}
     )
 
   target_link_directories(${PROJECT_NAME} PUBLIC
     ${Vulkan_LIBRARIES}
     ${GLFW_LIB}
+    ${STB_LIBRARIES}
   )
 
   target_link_libraries(${PROJECT_NAME} glfw3 vulkan-1)

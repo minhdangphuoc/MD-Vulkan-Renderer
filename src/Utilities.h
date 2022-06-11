@@ -1,11 +1,17 @@
 #pragma once
+
+
+
 #include <fstream>
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
 #include <glm/glm.hpp>
 
+
 #include <array>
+
+
 // Indices (locations) of QUeue Families (if they exist at all)
 class QueueFamilyIndices 
 {

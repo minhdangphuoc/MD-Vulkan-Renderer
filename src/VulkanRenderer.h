@@ -29,7 +29,14 @@
 #include <set>
 #include <cstdlib>
 
+
+#ifndef Utilities_h
+#define Utilities_h
+
 #include "Utilities.h"
+
+#endif
+
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -143,6 +150,9 @@ private:
 	VkDescriptorPool descriptorPool;
 	std::vector<VkDescriptorSet> descriptorSets;
 
+	// Texture Mapping
+	VkImage textureImage;
+	VkDeviceMemory textureImageMemory;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -164,7 +174,7 @@ private:
 	void createUniformBuffers();
 	void createDescriptorPool();
 	void createDescriptorSets();
-
+	void createTextureImage();
 
 
 	// - Recreate Function

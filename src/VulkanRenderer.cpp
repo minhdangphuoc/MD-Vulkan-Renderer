@@ -1,5 +1,13 @@
 #include "VulkanRenderer.h"
 
+#ifndef STB_H
+#define STB_H
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#endif
+
 VulkanRenderer::VulkanRenderer()
 {
 }
@@ -30,6 +38,7 @@ int VulkanRenderer::init(GLFWwindow* newWindow)
 		createGraphicsPipeline();
 		createFramebuffers();
 		createCommandPool();
+		createTextureImage();
 		createVertexBuffer();
 		createIndexBuffer();
 		createUniformBuffers();
@@ -1200,4 +1209,32 @@ void VulkanRenderer::createDescriptorSets()
 
 		vkUpdateDescriptorSets(mainDevice.logicalDevice, 1, &descriptorWrite, 0, nullptr);
 	}
+}
+
+void VulkanRenderer::createTextureImage()
+{
+	int texWidth, texHeight, texChannels;
+    stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    VkDeviceSize imageSize = texWidth * texHeight * 4;
+
+    if (!pixels) {
+        throw std::runtime_error("failed to load texture image!");
+    }
+
+	VkBuffer stagingBuffer;
+	VkDeviceMemory stagingBufferMemory;
+
+	createBuffer(
+		imageSize, 
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+		stagingBuffer, 
+		stagingBufferMemory);
+	
+	void* data;
+	vkMapMemory(mainDevice.logicalDevice, stagingBufferMemory, 0, imageSize, 0, &data);
+		memcpy(data, pixels, static_cast<size_t>(imageSize));
+	vkUnmapMemory(mainDevice.logicalDevice, stagingBufferMemory);
+
+	stbi_image_free(pixels);
 }
