@@ -529,10 +529,9 @@ void VulkanRenderer::createImageViews() {
 
 void VulkanRenderer::createGraphicsPipeline()
 {
-	auto vertShaderCode = readFile("../../shaders/shader.vert.spv");
-	if (vertShaderCode.empty()) readFile("shaders/shader.vert.spv");
-    auto fragShaderCode = readFile("../../shaders/shader.frag.spv");
-	if (fragShaderCode.empty()) readFile("shaders/shader.frag.spv");
+	auto vertShaderCode = readFile("shaders/shader.vert.spv");
+    auto fragShaderCode = readFile("shaders/shader.frag.spv");
+	
 	// Vertex
 	auto bindingDescription = Vertex::getBindingDescription();
 	auto attributeDescriptions = Vertex::getAttributeDescriptions();
@@ -1244,7 +1243,7 @@ void VulkanRenderer::createDescriptorSets()
 void VulkanRenderer::createTextureImage()
 {
 	int texWidth, texHeight, texChannels;
-    stbi_uc* pixels = stbi_load("../../textures/pepe.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load("textures/pepe.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
 
     if (!pixels) {
