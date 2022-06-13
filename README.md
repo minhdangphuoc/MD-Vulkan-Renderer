@@ -64,6 +64,8 @@
 
 ### Depth buffering
 
+- [ ] 3D geometry support
+
 ## Ver0.6.0
 
 ### Loading models
