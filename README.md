@@ -52,6 +52,14 @@
 
 ### Texture mapping
 
+- [x] Image
+- [x] Image view and sample
+- [x] Combined image sampler
+
+### Pepe
+
+![Pepe Texture](img/pepeTexture.gif)
+
 ## Ver0.5.0
 
 ### Depth buffering

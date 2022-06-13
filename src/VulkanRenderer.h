@@ -79,10 +79,10 @@ private:
 	// };
 
 	const std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}},
-		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		{{-0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 	};
 
 	const std::vector<uint16_t> indices = {
@@ -153,6 +153,9 @@ private:
 	// Texture Mapping
 	VkImage textureImage;
 	VkDeviceMemory textureImageMemory;
+	VkImageView textureImageView;
+	VkSampler textureSampler;
+	VkImageView createImageView (VkImage image, VkFormat format);
 
 	// Vulkan Functions
 	// - Create Functions
@@ -175,6 +178,19 @@ private:
 	void createDescriptorPool();
 	void createDescriptorSets();
 	void createTextureImage();
+	void createImage (
+		uint32_t width, 
+		uint32_t height, 
+		VkFormat format, 
+		VkImageTiling tiling, 
+		VkImageUsageFlags usage, 
+		VkMemoryPropertyFlags properties, 
+		VkImage& image, 
+		VkDeviceMemory& imageMemory
+	);
+
+	void createTextureImageView();
+	void createTextureSampler();
 
 
 	// - Recreate Function
@@ -202,6 +218,7 @@ private:
 
 	// -- Copying Function
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+	void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
 	// -- Recording Funtion
 	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
@@ -211,5 +228,19 @@ private:
 
 	// -- Update Funtions
 	void updateUniformBuffer(uint32_t currentImage);
+
+	// -- Transition Image
+	void transitionImageLayout (
+		VkImage image, 
+		VkFormat format, 
+		VkImageLayout oldLayout, 
+		VkImageLayout newLayout
+	);
+	
+	// -- Buffer Command
+	// --- Begin
+	VkCommandBuffer beginSingleTimeCommands();
+	// --- End
+	void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 };
 
