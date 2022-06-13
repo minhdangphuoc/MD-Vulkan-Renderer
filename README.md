@@ -52,6 +52,10 @@
 
 ### Texture mapping
 
+- [x] Image
+- [ ] Image view and sample
+- [ ] Combined image sampler
+
 ## Ver0.5.0
 
 ### Depth buffering
