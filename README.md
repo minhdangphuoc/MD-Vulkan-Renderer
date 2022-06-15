@@ -66,6 +66,10 @@
 
 - [x] 3D geometry support
 
+### Pepe 2
+
+![Pepe Deep Buffering](img/depthBuffering.gif)
+
 ## Ver0.6.0
 
 ### Loading models
