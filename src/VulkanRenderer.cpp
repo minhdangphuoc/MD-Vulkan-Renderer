@@ -969,6 +969,10 @@ void VulkanRenderer::deviceWaitIdle()
 
 void VulkanRenderer::cleanupSwapChain()
 {
+	vkDestroyImageView(mainDevice.logicalDevice, depthImageView, nullptr);
+    vkDestroyImage(mainDevice.logicalDevice, depthImage, nullptr);
+    vkFreeMemory(mainDevice.logicalDevice, depthImageMemory, nullptr);
+
 	for (auto & i : swapChainFramebuffers)
 	{
 		vkDestroyFramebuffer(mainDevice.logicalDevice, i, nullptr);
@@ -1003,6 +1007,7 @@ void VulkanRenderer::recreateSwapChain()
 	createImageViews();
 	createRenderPass();
     createGraphicsPipeline();
+	createDepthResources();
     createFramebuffers();
 }
 
