@@ -1,7 +1,7 @@
 include(./.env.cmake OPTIONAL RESULT_VARIABLE LOCAL_ENV)
 message(STATUS "Local .env.cmake: ${LOCAL_ENV}")
 
-cmake_minimum_required(VERSION 3.11.0)
+cmake_minimum_required(VERSION 3.23.0)
 
 set(NAME MDEngine)
 
@@ -66,6 +66,24 @@ if (NOT STB_FOUND)
 else()
 	message(STATUS "Using stb lib at: ${STB_LIBRARIES}")
 endif()
+
+# 4. Copy texture and shaders to build dir
+find_path(TEXTURES_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/textures)
+if (NOT TEXTURES_DIR_FOUND)
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/textures)
+endif()
+
+find_path(TEXTURES_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
+if (NOT TEXTURES_DIR_FOUND)
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
+endif()
+
+file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.frag.spv 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug/shaders" )
+file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.vert.spv 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug/shaders" )
+file( COPY ${PROJECT_SOURCE_DIR}/textures 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
 
 # If TINYOBJ_PATH not specified in .env.cmake, try fetching from git repo
 if (NOT TINYOBJ_PATH)
