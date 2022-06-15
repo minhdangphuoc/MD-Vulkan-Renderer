@@ -10,11 +10,6 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <chrono>
 
 #include <stdexcept>
@@ -79,14 +74,20 @@ private:
 	// };
 
 	const std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
+		{{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+		{{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
 	};
 
 	const std::vector<uint16_t> indices = {
-    	0, 1, 2, 2, 3, 0
+    	0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4
 	};
 
 	#ifdef NDEBUG
@@ -155,7 +156,12 @@ private:
 	VkDeviceMemory textureImageMemory;
 	VkImageView textureImageView;
 	VkSampler textureSampler;
-	VkImageView createImageView (VkImage image, VkFormat format);
+	
+	// Depth image and view
+	VkImage depthImage;
+	VkDeviceMemory depthImageMemory;
+	VkImageView depthImageView;
+
 
 	// Vulkan Functions
 	// - Create Functions
@@ -178,6 +184,7 @@ private:
 	void createDescriptorPool();
 	void createDescriptorSets();
 	void createTextureImage();
+	VkImageView createImageView (VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 	void createImage (
 		uint32_t width, 
 		uint32_t height, 
@@ -188,9 +195,9 @@ private:
 		VkImage& image, 
 		VkDeviceMemory& imageMemory
 	);
-
 	void createTextureImageView();
 	void createTextureSampler();
+	void createDepthResources();
 
 
 	// - Recreate Function
@@ -198,6 +205,7 @@ private:
 
 	// - Get Functions
 	void getPhysicalDevice();
+	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
 
 	// - Support Functions
 	// -- Checker Functions
@@ -205,12 +213,13 @@ private:
 	bool checkDeviceSuitable(VkPhysicalDevice device);
 	bool checkValidationLayerSupport();
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+	bool hasStencilComponent(VkFormat format);
 
-	// -- Getter & Finder Functions
-	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
+	// -- Finder Functions
 	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device); // Get SC support query
 	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-
+	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+	VkFormat findDepthFormat();
 	// -- Choosing Functions
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
