@@ -1199,7 +1199,7 @@ void VulkanRenderer::updateUniformBuffer(uint32_t currentImage)
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 	UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(.5f), time * glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
         ubo.proj[1][1] *= -1;
@@ -1351,13 +1351,14 @@ void VulkanRenderer::createTextureImage()
 void VulkanRenderer::loadModel()
 {
 	const std::string MODEL_PATH = "models/viking_room.obj";
-	
+	const std::string MTL_PATH = "";
+
 	tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &err, MODEL_PATH.c_str()), NULL, 0) {
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &err, MODEL_PATH.c_str(), MTL_PATH.c_str(), 1)) {
         throw std::runtime_error(err);
     }
 
