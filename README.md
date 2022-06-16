@@ -82,10 +82,6 @@
 
 ![Model](img/model.gif)
 
-### Entrée du château des Bois Francs
-
-[Another pot](https://sketchfab.com/3d-models/another-pot-de7b429669e34b2ca5a04e18c5d9e55d) by [naira001](https://sketchfab.com/naira001) is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/)
-
 
 ## Ver0.7.0
 
