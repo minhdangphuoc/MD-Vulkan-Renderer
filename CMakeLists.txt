@@ -73,9 +73,14 @@ if (NOT TEXTURES_DIR_FOUND)
   file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/textures)
 endif()
 
-find_path(TEXTURES_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
-if (NOT TEXTURES_DIR_FOUND)
+find_path(SHADERS_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
+if (NOT SHADERS_DIR_FOUND)
   file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
+endif()
+
+find_path(MODELS_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/shaders)
+if (NOT MODELS_DIR_FOUND)
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/models)
 endif()
 
 file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.frag.spv 
@@ -84,7 +89,9 @@ file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.vert.spv
       DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug/shaders" )
 file( COPY ${PROJECT_SOURCE_DIR}/textures 
       DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
-
+file( COPY ${PROJECT_SOURCE_DIR}/models 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
+      
 # If TINYOBJ_PATH not specified in .env.cmake, try fetching from git repo
 if (NOT TINYOBJ_PATH)
   message(STATUS "TINYOBJ_PATH not specified in .env.cmake, using external/tinyobjloader")

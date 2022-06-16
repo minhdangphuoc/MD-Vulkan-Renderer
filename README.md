@@ -74,7 +74,13 @@
 
 ### Loading models
 
-- [ ] Draw a model with texture
+- [x] Draw a model with texture
+
+### Viking room
+
+- Viking room model by [nigelgoh](https://sketchfab.com/nigelgoh) (CC BY 4.0)
+
+![Model](img/model.gif)
 
 ## Ver0.7.0
 
