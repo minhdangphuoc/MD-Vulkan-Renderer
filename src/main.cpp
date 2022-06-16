@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 
-#include "VulkanRenderer.h"
+#include "VulkanRenderer.hpp"
 
 GLFWwindow* window;
 VulkanRenderer vulkanRenderer;
