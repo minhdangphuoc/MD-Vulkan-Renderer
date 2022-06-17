@@ -70,16 +70,28 @@
 
 ![Pepe Deep Buffering](img/depthBuffering.gif)
 
-## Ver0.6.0
-
 ### Loading models
 
-- [ ] Draw a model with texture
+- [x] Draw a model with texture
 
-## Ver0.7.0
+### Viking room
+
+- Viking room model by [nigelgoh](https://sketchfab.com/nigelgoh) on (CC BY 4.0).
+
+![Model](img/model.gif)
+
+### MC grass block
+
+- [Minecraft Grass Block](https://sketchfab.com/3d-models/minecraft-grass-block-84938a8f3f8d4a0aa64aaa9c4e4d27d3) by [Render at Night](https://sketchfab.com/Render_at_Night) licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
+
+![Model](img/mccube.gif)
+
+## Ver0.6.0
 
 ### Generating Mipmaps
 
-## Ver1.0.0
+- [ ] Able to generate Mipmaps  
 
 ### Multisampling
+
+- [ ] Multisampling
