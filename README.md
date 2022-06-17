@@ -70,8 +70,6 @@
 
 ![Pepe Deep Buffering](img/depthBuffering.gif)
 
-## Ver0.6.0
-
 ### Loading models
 
 - [x] Draw a model with texture
@@ -88,9 +86,11 @@
 
 ![Model](img/mccube.gif)
 
-## Ver0.7.0
+## Ver0.6.0
 
 ### Generating Mipmaps
+
+- [ ] Able to generate Mipmaps  
 
 ## Ver1.0.0
 
