@@ -99,3 +99,8 @@
 # Project using this VK Renderer
 
 - [BNO055-BLE-Vulkan](https://github.com/minhdangphuoc/BNO055-BLE-Vulkan)
+
+# References
+
+- [Vulkan Tutorial](https://vulkan-tutorial.com/)
+- [Brendan Galea - Vulkan (c++) Game Engine Tutorials](https://www.youtube.com/c/BrendanGalea)
