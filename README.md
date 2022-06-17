@@ -95,3 +95,7 @@
 ### Multisampling
 
 - [ ] Multisampling
+
+# Project using this VK Renderer
+
+- [BNO055-BLE-Vulkan](https://github.com/minhdangphuoc/BNO055-BLE-Vulkan)
