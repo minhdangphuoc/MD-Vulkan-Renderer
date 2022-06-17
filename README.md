@@ -92,6 +92,6 @@
 
 - [ ] Able to generate Mipmaps  
 
-## Ver1.0.0
-
 ### Multisampling
+
+- [ ] Multisampling
