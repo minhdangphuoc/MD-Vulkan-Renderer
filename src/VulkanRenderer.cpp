@@ -508,7 +508,9 @@ void VulkanRenderer::createSwapChain()
 
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-		_putenv("DISABLE_VK_LAYER_VALVE_steam_overlay_1=1");
+		#ifdef _WIN64 || _WIN32 
+			_putenv("DISABLE_VK_LAYER_VALVE_steam_overlay_1=1");
+		#endif
 		
         if (vkCreateSwapchainKHR(mainDevice.logicalDevice, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
             throw std::runtime_error("failed to create swap chain!");
